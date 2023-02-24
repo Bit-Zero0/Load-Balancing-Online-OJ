@@ -55,7 +55,7 @@ namespace ns_compiler
             else
             {
                 waitpid(pid, nullptr, 0);
-                if (FileUtil::IsFileExists(file_name))
+                if (FileUtil::IsFileExists(PathUtil::Exe(file_name))
                 {
                     LOG(INFO) << PathUtil::Src(file_name) << " 编译成功!"
                               << "\n";
