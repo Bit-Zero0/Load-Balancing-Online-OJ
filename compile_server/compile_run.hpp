@@ -17,6 +17,33 @@ namespace ns_compile_and_run
     class CompileAndRun
     {
     public:
+	static void CleanTempFile(const std::string &file_name)
+        {
+            std::string _compile_error = PathUtil::CompileError(file_name);
+            if (FileUtil::IsFileExists(_compile_error))
+                unlink(_compile_error.c_str());
+
+            std::string _stdin = PathUtil::Stdin(file_name);
+            if (FileUtil::IsFileExists(_stdin))
+                unlink(_stdin.c_str());
+
+            std::string _stdout = PathUtil::Stdout(file_name);
+            if (FileUtil::IsFileExists(_stdout))
+                unlink(_stdout.c_str());
+
+            std::string _stderr = PathUtil::Stderr(file_name);
+            if (FileUtil::IsFileExists(_stderr))
+                unlink(_stderr.c_str());
+
+            std::string _exe = PathUtil::Exe(file_name);
+            if (FileUtil::IsFileExists(_exe))
+                unlink(_exe.c_str());
+
+            std::string _src = PathUtil::Src(file_name);
+            if (FileUtil::IsFileExists(_src))
+                unlink(_src.c_str());
+        }
+		
         static std::string CodeToDesc(int code, const std::string &file_name)
         {
             std::string desc;
@@ -125,6 +152,8 @@ namespace ns_compile_and_run
             }
             Json::StyledWriter writer;
             *out_json = writer.write(out_value);
+			
+			CleanTempFile(file_name);
         }
     };
 }
