@@ -124,7 +124,7 @@ namespace ns_util
             (*content).clear();
 
             std::ifstream in(target);
-            if (in.is_open())
+            if (!in.is_open())
             {
                 return false;
             }
