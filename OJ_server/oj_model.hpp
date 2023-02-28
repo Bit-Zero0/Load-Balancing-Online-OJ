@@ -29,7 +29,7 @@ namespace ns_model
         std::string tail;   // 题目的测试用例，需要和header拼接，形成完整代码
     };
 
-    const string questions_list = "./questions/question.list";
+    const string questions_list = "./questions/questions.list";
     const string questions_path = "./questions/";
 
     class Model
