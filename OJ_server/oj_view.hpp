@@ -19,7 +19,7 @@ namespace ns_view
         void AllExpandHtml(const vector<struct Question> &questions, std::string *html)
         {
 
-            std::string src_path = temp_path + "all-questions.html";
+            std::string src_path = template_path + "all-questions.html";
 
             // 形成数字典
             ctemplate::TemplateDictionary root("all_questions");
@@ -41,7 +41,7 @@ namespace ns_view
 
         void OneExpandHtml(const struct Question &q, string *html)
         {
-            std::string src_path = temp_path + "one_question.html";
+            std::string src_path = template_path + "one_question.html";
 
             ctemplate::TemplateDictionary root("one_question");
             root.SetValue("numver", q.number);

@@ -10,7 +10,7 @@
 
 #include "../comm/log.hpp"
 #include "../comm/util.hpp"
-#include "oj_model.hpp"
+#include "oj_model2.hpp"
 #include "oj_view.hpp"
 #include "../comm/httplib.h"
 
@@ -77,6 +77,17 @@ namespace ns_controller
 
             return _load;
         }
+
+        void ResetLoad()
+        {
+            if (mtx)
+                mtx->lock();
+
+            load = 0;
+
+            if (mtx)
+                mtx->unlock();
+        }
     };
 
     const std::string service_machine = "./conf/service_machine.conf";
@@ -118,7 +129,7 @@ namespace ns_controller
                 if (tokens.size() != 2)
                 {
                     LOG(WARNNING) << " 切分 " << line << " 失败"
-                                 << "\n";
+                                  << "\n";
                     continue;
                 }
 
@@ -177,6 +188,7 @@ namespace ns_controller
             {
                 if (*iter == which)
                 {
+                    machines[which].ResetLoad();
                     online.erase(iter);
                     offline.push_back(which);
                     break; // 因为break的存在，所有我们暂时不考虑迭代器失效的问题
@@ -187,6 +199,12 @@ namespace ns_controller
 
         void OnlineMachine()
         {
+            mtx.lock();
+            online.insert(online.end(), offline.begin(), offline.end());
+            offline.erase(offline.begin(), offline.end());
+            mtx.unlock();
+
+            LOG(INFO) << "所有主机已上线" << '\n';
         }
 
         void ShowMachines()
@@ -202,7 +220,7 @@ namespace ns_controller
             std::cout << "当前离线主机列表: ";
             for (auto &id : offline)
             {
-                std::cout << id << "";
+                std::cout << id << " ";
             }
             std::cout << std::endl;
             mtx.unlock();
@@ -221,6 +239,11 @@ namespace ns_controller
         Controller(){};
         ~Controller(){};
 
+        void RecoveryMachine()
+        {
+            load_balace.OnlineMachine();
+        }
+
         // 根据题目数据构建网页
         //  html: 输出型参数
         bool AllQuestions(string *html)
@@ -229,6 +252,8 @@ namespace ns_controller
             vector<struct Question> all;
             if (model.GetAllQuestions(&all))
             {
+                sort(all.begin(), all.end(), [](const struct Question &q1, const struct Question &q2)
+                     { return atoi(q1.number.c_str()) < atoi(q2.number.c_str()); });
                 view.AllExpandHtml(all, html); // 获取题目信息成功，将所有的题目数据构建成网页
             }
             else
@@ -257,7 +282,7 @@ namespace ns_controller
             return ret;
         }
 
-        bool Judge(const std::string &number, const std::string &in_json, std::string *out_json)
+        void Judge(const std::string &number, const std::string &in_json, std::string *out_json)
         {
             struct Question q;
             model.GetOneQuestion(number, &q);
