@@ -3,8 +3,6 @@
 #include <vector>
 #include <ctemplate/template.h>
 
-#include "../comm/log.hpp"
-#include "../comm/util.hpp"
 #include "oj_model.hpp"
 
 namespace ns_view
@@ -19,13 +17,13 @@ namespace ns_view
         void AllExpandHtml(const vector<struct Question> &questions, std::string *html)
         {
 
-            std::string src_path = template_path + "all-questions.html";
+            std::string src_path = template_path + "all_questions.html";
 
             // 形成数字典
             ctemplate::TemplateDictionary root("all_questions");
             for (auto &q : questions)
             {
-                ctemplate::TemplateDictionary *sub = root.AddSectionDictionary("questions_list");
+                ctemplate::TemplateDictionary *sub = root.AddSectionDictionary("question_list");
                 // 题目的编号 题目的标题 题目的难度
                 sub->SetValue("number", q.number);
                 sub->SetValue("title", q.title);
@@ -44,7 +42,7 @@ namespace ns_view
             std::string src_path = template_path + "one_question.html";
 
             ctemplate::TemplateDictionary root("one_question");
-            root.SetValue("numver", q.number);
+            root.SetValue("number", q.number);
             root.SetValue("title", q.title);
             root.SetValue("star", q.star);
             root.SetValue("desc", q.desc);
