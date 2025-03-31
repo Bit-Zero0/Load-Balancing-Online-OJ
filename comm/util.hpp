@@ -10,7 +10,6 @@
 #include <atomic>
 #include <boost/algorithm/string.hpp>
 
-const std::string temp_path = "./temp/";
 
 namespace ns_util
 {
@@ -34,6 +33,8 @@ namespace ns_util
         }
     };
 	
+    const std::string temp_path = "./temp/";
+
     class PathUtil
     {
     public:
@@ -50,13 +51,13 @@ namespace ns_util
         // 构建源文件路径+后缀的完整文件名
         static std::string Src(const std::string &file_name)
         {
-            return AddSuffix(file_name, "cpp");
+            return AddSuffix(file_name, ".cpp");
         }
 
         // 构建可执行程序的完整路径+后缀名
         static std::string Exe(const std::string &file_name)
         {
-            return AddSuffix(file_name, "exe");
+            return AddSuffix(file_name, ".exe");
         }
 
 		static std::string CompileError(const std::string &file_name)
@@ -69,7 +70,7 @@ namespace ns_util
         // 构建该程序对应的标准错误完整的路径+后缀名
         static std::string Stderr(const std::string &file_name)
         {
-            return AddSuffix(file_name, "stderr");
+            return AddSuffix(file_name, ".stderr");
         }
 		
 		static std::string Stdin(const std::string &file_name)
@@ -86,6 +87,8 @@ namespace ns_util
     class FileUtil
     {
     public:
+
+        // 判断文件是否存在
         static bool IsFileExists(const std::string &path_name)
         {
             struct stat buf;
@@ -101,7 +104,7 @@ namespace ns_util
 		static std::string UniqueFileName()
         {
             static std::atomic_uint id(0);
-            ++id;
+            id++;
             std::string ms = TimeUtil::GetTimeMs();
             std::string unique_id = std::to_string(id);
             return ms + "_" + unique_id;
@@ -109,9 +112,12 @@ namespace ns_util
 
         static bool WriteFile(const std::string &target, const std::string &content)
         {
+
             std::ofstream out(target);
+
             if (!out.is_open())
             {
+                std::cout << "写入文件失败: " << target << ", 错误: " << std::strerror(errno) << "\n";
                 return false;
             }
 

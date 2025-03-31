@@ -109,7 +109,8 @@ namespace ns_compile_and_run
             // 形成临时src文件
             if (!FileUtil::WriteFile(PathUtil::Src(file_name), code))
             {
-                status_code = -2;
+                status_code = -2; //未知错误
+                std::cout << "形成临时src文件失败" << "\n";
                 goto END;
             }
 
@@ -121,10 +122,10 @@ namespace ns_compile_and_run
             }
 
             run_result = Runner::Run(file_name, cpu_limit, mem_limit);
-
             if (run_result < 0)
             {
                 status_code = -2; // //未知错误
+                std::cout << "Run未知错误" << "\n";
             }
             else if (run_result > 0)
             {
@@ -132,6 +133,7 @@ namespace ns_compile_and_run
             }
             else
             {
+                std::cout << "Run success" << "\n";
                 status_code = 0; // 运行成功
             }
 

@@ -10,6 +10,7 @@ all:
 .PHONY:output
 output:
 	@mkdir -p output/compile_server;\
+	mkdir -p output/compile_server/temp;\
 	mkdir -p output/OJ_server;\
 	cp -rf OJ_server/conf output/OJ_server/;\
 	cp -rf OJ_server/lib output/OJ_server/;\
@@ -30,7 +31,7 @@ clean:
 	cd -;\
 	cd OJ_server;\
 	make clean;\
-	cd - \
+	cd - ;\
 	rm -rf output;
 
 

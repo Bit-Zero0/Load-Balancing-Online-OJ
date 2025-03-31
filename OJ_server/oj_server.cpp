@@ -41,14 +41,15 @@ int main()
         ctrl.Question(number, &html);
         resp.set_content(html , "text/html;charset=utf-8"); });
 
+    // 用户提交代码，进行判题
     svr.Post(R"(/judge/(\d+))", [&ctrl](const Request &req, Response &resp)
              { 
                 std::string number = req.matches[1]; 
                 std::string result_json;
-                ctrl.Judge(number , req.body,&result_json); 
+                ctrl.Judge(number , req.body, &result_json); 
                 resp.set_content(result_json , "application/json;charset=utf-8"); });
 
     svr.set_base_dir("./wwwroot");
-    svr.listen("0.0.0.0", 8080);
+    svr.listen("0.0.0.0", 8088);
     return 0;
 }

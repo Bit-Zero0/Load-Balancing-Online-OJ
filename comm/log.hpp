@@ -15,7 +15,7 @@ namespace ns_log
         DEBUG,
         WARNNING,
         ERROR,
-        FALAL
+        FATAL
     };
 
     inline std::ostream &Log(const std::string &level, const std::string &file_name, int line)

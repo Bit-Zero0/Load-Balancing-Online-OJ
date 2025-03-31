@@ -10,7 +10,7 @@
 
 #include "../comm/log.hpp"
 #include "../comm/util.hpp"
-#include "oj_model2.hpp"
+#include "oj_model.hpp"
 #include "oj_view.hpp"
 #include "../comm/httplib.h"
 
@@ -116,7 +116,7 @@ namespace ns_controller
             std::ifstream in(machine_conf);
             if (!in.is_open())
             {
-                LOG(FALAT) << " 加载: " << machine_conf << " 失败"
+                LOG(FATAL) << " 加载: " << machine_conf << " 失败"
                            << "\n";
                 return false;
             }
@@ -295,7 +295,7 @@ namespace ns_controller
 
             // 2. 重新拼接用户代码+测试用例代码，形成新的代码
             Json::Value compile_value;
-            compile_value["input"] = in_value["input"];
+            compile_value["input"] = in_value["input"].asString();
             compile_value["code"] = code + "\n" + q.tail;
             compile_value["cpu_limit"] = q.cpu_limit;
             compile_value["mem_limit"] = q.mem_limit;
@@ -335,7 +335,7 @@ namespace ns_controller
                     LOG(ERROR) << " 当前请求的主机id: " << id << " 详情: " << m->ip << ":" << m->port << " 可能已经离线"
                                << "\n";
                     load_balace.OfflineMachine(id);
-                    load_balace.ShowMachines(); // for test
+                    load_balace.ShowMachines(); // 测试
                 }
             }
         }

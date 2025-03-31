@@ -59,8 +59,8 @@ namespace ns_runner
 
             if (_stdin_fd < 0 || _stdout_fd < 0 || _stderr_fd < 0)
             {
-                LOG(ERROR) << "运行时打开标准文件失败"
-                           << "\n";
+                LOG(ERROR) << "运行时打开标准文件失败" << "\n";
+                std::cout << "运行时打开标准文件失败" << "\n";
                 return -1; // 代表打开文件失败
             }
 
@@ -72,6 +72,7 @@ namespace ns_runner
                 close(_stdin_fd);
                 close(_stdout_fd);
                 close(_stderr_fd);
+                std::cout << "运行时创建子进程失败" << "\n";
                 return -2; // 代表创建子进程失败
             }
             else if (pid == 0)
