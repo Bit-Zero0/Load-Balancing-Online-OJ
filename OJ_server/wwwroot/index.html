@@ -5,100 +5,129 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>这是我的个人OJ系统</title>
+    <title>在线编程平台</title>
+    <link rel="stylesheet" href="/template_html/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 起手式, 100%保证我们的样式设置可以不受默认影响 */
-        * {
-            /* 消除网页的默认外边距 */
-            margin: 0px;
-            /* 消除网页的默认内边距 */
-            padding: 0px;
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        html,
-        body {
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 10px;
+            background-color: var(--secondary-bg);
+            box-shadow: 0 5px 15px var(--shadow-color);
             width: 100%;
-            height: 100%;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .container .navbar {
-            width: 100%;
-            height: 50px;
-            background-color: black;
-            /* 给父级标签设置overflow，取消后续float带来的影响 */
-            overflow: hidden;
+        .hero-section h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            transition: color 0.3s;
         }
 
-        .container .navbar a {
-            /* 设置a标签是行内块元素，允许你设置宽度 */
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            transition: color 0.3s;
+        }
+
+        .cta-button {
             display: inline-block;
-            /* 设置a标签的宽度,a标签默认行内元素，无法设置宽度 */
-            width: 80px;
-            /* 设置字体颜色 */
-            color: white;
-            /* 设置字体的大小 */
-            font-size: large;
-            /* 设置文字的高度和导航栏一样的高度 */
-            line-height: 50px;
-            /* 去掉a标签的下划线 */
+            padding: 12px 30px;
+            background-color: var(--primary-green);
+            color: var(--primary-bg);
             text-decoration: none;
-            /* 设置a标签中的文字居中 */
-            text-align: center;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px var(--shadow-color);
         }
 
-        /* 设置鼠标事件 */
-        .container .navbar a:hover {
-            background-color: green;
-        }
-
-        .container .navbar .login {
-            float: right;
-        }
-
-        .container .content {
-            /* 设置标签的宽度 */
-            width: 800px;
-            /* 用来调试 */
-            /* background-color: #ccc; */
-            /* 整体居中 */
-            margin: 0px auto;
-            /* 设置文字居中 */
-            text-align: center;
-            /* 设置上外边距 */
-            margin-top: 200px;
-        }
-
-        .container .content .font_ {
-            /* 设置标签为块级元素，独占一行，可以设置高度宽度等属性 */
-            display: block;
-            /* 设置每个文字的上外边距 */
-            margin-top: 20px;
-            /* 去掉a标签的下划线 */
-            text-decoration: none;
-            /* 设置字体大小
-            font-size: larger; */
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px var(--shadow-color);
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- 导航栏， 功能不实现-->
         <div class="navbar">
-            <a href="/">首页</a>
-            <a href="/all_questions">题库</a>
-            <a href="#">竞赛</a>
-            <a href="#">讨论</a>
-            <a href="#">求职</a>
-            <a class="login" href="#">登录</a>
+            <div class="nav-links">
+                <a href="/">首页</a>
+                <a href="/all_questions">题库</a>
+                <a href="#">竞赛</a>
+                <a href="#">讨论</a>
+                <a href="#">求职</a>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <a href="#">登录</a>
+            </div>
         </div>
-        <!-- 网页的内容 -->
+        
         <div class="content">
-            <h1 class="font_">欢迎来到我的OnlineJudge平台</h1>
-            <p class="font_">这个我个人独立开发的一个在线OJ平台</p>
-            <a class="font_" href="/all_questions">点击我开始编程啦!</a>
+            <div class="hero-section">
+                <h1>欢迎来到在线编程平台</h1>
+                <p>这是一个专为编程爱好者打造的在线评测系统，提供丰富的编程题目和实时评测功能。</p>
+                <a class="cta-button" href="/all_questions">开始编程之旅</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h4>© 2023 在线编程平台 - 让编程更简单</h4>
         </div>
     </div>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        
+        // 检查本地存储中的主题设置
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        
+        // 更新图标
+        updateIcon();
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            updateIcon();
+        });
+        
+        function updateIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                icon.className = 'fas fa-moon';
+            } else {
+                icon.className = 'fas fa-sun';
+            }
+        }
+    </script>
 </body>
 
 </html>

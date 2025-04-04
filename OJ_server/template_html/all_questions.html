@@ -5,118 +5,91 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>在线OJ-题目列表</title>
+    <title>在线编程平台 - 题目列表</title>
+    <link rel="stylesheet" href="/template_html/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 起手式, 100%保证我们的样式设置可以不受默认影响 */
-        * {
-            /* 消除网页的默认外边距 */
-            margin: 0px;
-            /* 消除网页的默认内边距 */
-            padding: 0px;
+        .question_list {
+            flex: 1;
+            width: 100%;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        html,
-        body {
-            width: 100%;
-            height: 100%;
+        .question_list h1 {
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            transition: color 0.3s;
         }
 
-        .container .navbar {
+        .question_list table {
             width: 100%;
-            height: 50px;
-            background-color: black;
-            /* 给父级标签设置overflow，取消后续float带来的影响 */
+            border-collapse: collapse;
+            background-color: var(--secondary-bg);
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .container .navbar a {
-            /* 设置a标签是行内块元素，允许你设置宽度 */
-            display: inline-block;
-            /* 设置a标签的宽度,a标签默认行内元素，无法设置宽度 */
-            width: 80px;
-            /* 设置字体颜色 */
-            color: white;
-            /* 设置字体的大小 */
-            font-size: large;
-            /* 设置文字的高度和导航栏一样的高度 */
-            line-height: 50px;
-            /* 去掉a标签的下划线 */
+        .question_list table th {
+            background-color: var(--primary-light);
+            color: var(--primary-bg);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .question_list table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: border-color 0.3s, color 0.3s;
+        }
+
+        .question_list table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .question_list table tr:hover {
+            background-color: var(--primary-bg);
+            transition: background-color 0.3s;
+        }
+
+        .question_list table .item a {
             text-decoration: none;
-            /* 设置a标签中的文字居中 */
-            text-align: center;
+            color: var(--primary-light);
+            font-weight: 500;
+            transition: color 0.3s;
         }
 
-        /* 设置鼠标事件 */
-        .container .navbar a:hover {
-            background-color: green;
-        }
-
-        .container .navbar .login {
-            float: right;
-        }
-
-        .container .question_list {
-            padding-top: 50px;
-            width: 800px;
-            height: 100%;
-            margin: 0px auto;
-            /* background-color: #ccc; */
-            text-align: center;
-        }
-
-        .container .question_list table {
-            width: 100%;
-            font-size: large;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-            margin-top: 50px;
-            background-color: rgb(243, 248, 246);
-        }
-
-        .container .question_list h1 {
-            color: green;
-        }
-
-        .container .question_list table .item {
-            width: 100px;
-            height: 40px;
-            font-size: large;
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        .container .question_list table .item a {
-            text-decoration: none;
-            color: black;
-        }
-
-        .container .question_list table .item a:hover {
-            color: blue;
+        .question_list table .item a:hover {
+            color: var(--primary-dark);
             text-decoration: underline;
-        }
-
-        .container .footer {
-            width: 100%;
-            height: 50px;
-            text-align: center;
-            line-height: 50px;
-            color: #ccc;
-            margin-top: 15px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- 导航栏， 功能不实现-->
         <div class="navbar">
-            <a href="/">首页</a>
-            <a href="/all_questions">题库</a>
-            <a href="#">竞赛</a>
-            <a href="#">讨论</a>
-            <a href="#">求职</a>
-            <a class="login" href="#">登录</a>
+            <div class="nav-links">
+                <a href="/">首页</a>
+                <a href="/all_questions">题库</a>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
         </div>
+        
         <div class="question_list">
-            <h1>OnlineJuge题目列表</h1>
+            <h1>编程题目列表</h1>
             <table>
                 <tr>
                     <th class="item">编号</th>
@@ -132,12 +105,43 @@
                 {{/question_list}}
             </table>
         </div>
+        
         <div class="footer">
-            <!-- <hr> -->
-            <h4>@Fat-Sheep</h4>
+            <h4>© 2023 在线编程平台 - 让编程更简单</h4>
         </div>
     </div>
 
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        
+        // 检查本地存储中的主题设置
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        
+        // 更新图标
+        updateIcon();
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            updateIcon();
+        });
+        
+        function updateIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                icon.className = 'fas fa-moon';
+            } else {
+                icon.className = 'fas fa-sun';
+            }
+        }
+    </script>
 </body>
 
 </html>

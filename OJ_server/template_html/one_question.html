@@ -5,184 +5,440 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ext-language_tools.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.min.css" id="hljs-light">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="/template_html/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>{{number}}.{{title}}</title>
-    <!-- 引入ACE插件 -->
-    <!-- 官网链接： -->
-    <!-- CDN链接：https://cdnjs.com/libraries/ace -->
-    <!-- 使用介绍：https://www.iteye.com/blog/ybc77107-2296261 -->
-    <!-- https://justcode.ikeepstudying.com/2016/05/ace-editor-%E5%9C%A8%E7%BA%BF%E4%BB%A3%E7%A0%81%E7%BC%96%E8%BE%91%E6%9E%81%E5%85%B6%E9%AB%98%E4%BA%AE/ -->
-    <!-- 引入ACE CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript"
-        charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ext-language_tools.js" type="text/javascript"
-        charset="utf-8"></script>
-    <!-- 引入jquery CDN -->
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-
     <style>
+        :root {
+            --primary-dark: #27445D;
+            --primary-green: #497D74;
+            --primary-light: #71BBB2;
+            --primary-bg: #EFE9D5;
+        }
+
         * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        html,
         body {
-            width: 100%;
-            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-dark);
         }
 
-        .container .navbar {
-            width: 100%;
-            height: 50px;
-            background-color: black;
-            /* 给父级标签设置overflow，取消后续float带来的影响 */
-            overflow: hidden;
+        .navbar {
+            background-color: var(--primary-dark);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .container .navbar a {
-            /* 设置a标签是行内块元素，允许你设置宽度 */
-            display: inline-block;
-            /* 设置a标签的宽度,a标签默认行内元素，无法设置宽度 */
-            width: 80px;
-            /* 设置字体颜色 */
-            color: white;
-            /* 设置字体的大小 */
-            font-size: large;
-            /* 设置文字的高度和导航栏一样的高度 */
-            line-height: 50px;
-            /* 去掉a标签的下划线 */
+        .navbar a {
+            color: var(--primary-bg);
             text-decoration: none;
-            /* 设置a标签中的文字居中 */
-            text-align: center;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
         }
 
-        /* 设置鼠标事件 */
-        .container .navbar a:hover {
-            background-color: green;
+        .navbar a:hover {
+            background-color: var(--primary-green);
         }
 
-        .container .navbar .login {
-            float: right;
+        .navbar .login {
+            background-color: var(--primary-green);
         }
 
-        .container .part1 {
+        .container {
             width: 100%;
-            height: 600px;
-            overflow: hidden;
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            height: calc(100vh - 60px);
         }
 
-        .container .part1 .left_desc {
-            width: 50%;
-            height: 600px;
-            float: left;
-            overflow: scroll;
+        .code-container {
+            display: flex;
+            gap: 6px;
+            margin-top: 20px;
+            position: relative;
+            height: calc(100% - 100px);
         }
 
-        .container .part1 .left_desc h3 {
-            padding-top: 10px;
-            padding-left: 10px;
+        .left-desc {
+            flex: 1;
+            background-color: var(--secondary-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            min-width: 250px;
+            overflow: auto;
+            word-wrap: break-word;
+            height: 100%;
+            width: 45%;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .container .part1 .left_desc pre {
-            padding-top: 10px;
-            padding-left: 10px;
-            font-size: medium;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        .left-desc h3 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+            transition: color 0.3s, border-color 0.3s;
         }
 
-        .container .part1 .right_code {
-            width: 50%;
-            float: right;
+        .left-desc pre {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
-        .container .part1 .right_code .ace_editor {
-            height: 600px;
+        .right-code {
+            flex: 1;
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            padding: 4px;
+            min-width: 250px;
+            height: 100%;
+            width: 45%;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .container .part2 {
+        .ace_editor {
+            height: 100% !important;
+        }
+
+        .submit-section {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--secondary-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            z-index: 10;
+            transition: all 0.3s ease;
+            background-color: #71BBB2;
+        }
+
+        .result {
+            background-color: var(--primary-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            width: 76%;
+            height: auto;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-green);
+            color: var(--primary-bg);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .show-submit-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-green);
+            color: var(--primary-bg);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            display: none;
+            z-index: 10;
+        }
+
+        .show-submit-btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        @media (max-width: 768px) {
+            .code-container {
+                flex-direction: column;
+            }
+
+            .submit-section {
+                position: static;
+                flex-direction: column;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .result {
+                width: 100%;
+            }
+
+            .resizer {
+                display: none !important;
+            }
+        }
+
+        .resizer {
+            width: 10px;
+            height: 100%;
+            background-color: var(--primary-dark);
+            cursor: col-resize;
+            opacity: 0.5;
+            transition: opacity 0.3s, background-color 0.3s;
+            position: absolute;
+            top: 0;
+            z-index: 10;
+            border-radius: 4px;
+        }
+        
+        .resizer:hover {
+            opacity: 0.8;
+        }
+
+        .markdown-content {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+        
+        .markdown-content h1, 
+        .markdown-content h2, 
+        .markdown-content h3, 
+        .markdown-content h4 {
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            color: var(--primary-dark);
+            transition: color 0.3s;
+        }
+        
+        .markdown-content p {
+            margin-bottom: 1em;
+        }
+        
+        .markdown-content code {
+            background-color: var(--code-bg);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            transition: background-color 0.3s;
+        }
+        
+        .markdown-content pre {
+            background-color: var(--code-bg);
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1em 0;
+            transition: background-color 0.3s;
+        }
+        
+        .markdown-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .markdown-content ul, 
+        .markdown-content ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary-light);
+            padding-left: 1em;
+            margin-left: 0;
+            color: var(--text-color);
+            opacity: 0.8;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        
+        .markdown-content img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .markdown-content table {
+            border-collapse: collapse;
             width: 100%;
-            overflow: hidden;
+            margin-bottom: 1em;
+        }
+        
+        .markdown-content th, 
+        .markdown-content td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+            transition: border-color 0.3s;
+        }
+        
+        .markdown-content th {
+            background-color: var(--primary-light);
+            color: var(--primary-bg);
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .container .part2 .result {
-            width: 300px;
-            float: left;
+        .submit-resizer {
+            width: 100%;
+            height: 6px;
+            background-color: var(--primary-dark);
+            cursor: row-resize;
+            opacity: 0.5;
+            transition: opacity 0.3s, background-color 0.3s;
+            position: absolute;
+            top: 0;
+            z-index: 10;
         }
-
-        .container .part2 .btn-submit {
-            width: 120px;
-            height: 50px;
-            font-size: large;
-            float: right;
-            background-color: #26bb9c;
-            color: #FFF;
-            /* 给按钮带上圆角 */
-            /* border-radius: 1ch; */
-            border: 0px;
-            margin-top: 10px;
-            margin-right: 10px;
-        }
-
-        .container .part2 button:hover {
-            color: green;
-        }
-
-        .container .part2 .result {
-            margin-top: 15px;
-            margin-left: 15px;
-        }
-
-        .container .part2 .result pre {
-            font-size: large;
+        
+        .submit-resizer:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <!-- 导航栏， 功能不实现-->
-        <div class="navbar">
+    <div class="navbar">
+        <div class="nav-links">
             <a href="/">首页</a>
             <a href="/all_questions">题库</a>
             <a href="#">竞赛</a>
             <a href="#">讨论</a>
-            <a href="#">求职</a>
-            <a class="login" href="#">登录</a>
         </div>
-        <!-- 左右呈现，题目描述和预设代码 -->
-        <div class="part1">
-            <div class="left_desc">
+        <div style="display: flex; align-items: center;">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+            </button>
+            <a href="#">登录</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="code-container">
+            <div class="left-desc">
                 <h3><span id="number">{{number}}</span>.{{title}}_{{star}}</h3>
-                <pre>{{desc}}</pre>
+                <div id="markdown-desc" class="markdown-content">{{desc}}</div>
             </div>
-            <div class="right_code">
+            <div class="resizer" id="dragMe"></div>
+            <div class="right-code">
                 <pre id="code" class="ace_editor"><textarea class="ace_text-input">{{pre_code}}</textarea></pre>
             </div>
         </div>
-        <!-- 提交并且得到结果，并显示 -->
-        <div class="part2">
+
+        <div class="submit-section" id="submitSection">
+            <div class="submit-resizer" id="submitDragMe"></div>
             <div class="result"></div>
             <button class="btn-submit" onclick="submit()">提交代码</button>
         </div>
+        <button class="show-submit-btn" id="showSubmitBtn" onclick="showSubmitSection()">显示提交区域</button>
     </div>
+
     <script>
-        //初始化对象
-        editor = ace.edit("code");
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        const hljsLight = document.getElementById('hljs-light');
+        const hljsDark = document.getElementById('hljs-dark');
+        
+        // 检查本地存储中的主题设置
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        
+        // 更新代码高亮样式
+        if (currentTheme === 'dark') {
+            hljsLight.disabled = true;
+            hljsDark.disabled = false;
+        } else {
+            hljsLight.disabled = false;
+            hljsDark.disabled = true;
+        }
+        
+        // 更新图标
+        updateIcon();
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // 切换代码高亮样式
+            if (newTheme === 'dark') {
+                hljsLight.disabled = true;
+                hljsDark.disabled = false;
+            } else {
+                hljsLight.disabled = false;
+                hljsDark.disabled = true;
+            }
+            
+            // 更新编辑器主题
+            if (newTheme === 'dark') {
+                editor.setTheme("ace/theme/monokai");
+            } else {
+                editor.setTheme("ace/theme/chrome");
+            }
+            
+            updateIcon();
+            
+            // 重新渲染Markdown内容以更新代码高亮
+            renderMarkdown();
+        });
+        
+        function updateIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                icon.className = 'fas fa-moon';
+            } else {
+                icon.className = 'fas fa-sun';
+            }
+        }
 
-        //设置风格和语言（更多风格和语言，请到github上相应目录查看）
-        // 主题大全：http://www.manongjc.com/detail/25-cfpdrwkkivkikmk.html
-        editor.setTheme("ace/theme/monokai");
+        // 初始化ACE编辑器
+        const editor = ace.edit("code");
+        
+        // 根据当前主题设置编辑器主题
+        if (currentTheme === 'dark') {
+            editor.setTheme("ace/theme/monokai");
+        } else {
+            editor.setTheme("ace/theme/chrome");
+        }
+        
         editor.session.setMode("ace/mode/c_cpp");
-
-        // 字体大小
         editor.setFontSize(16);
-        // 设置默认制表符的大小:
         editor.getSession().setTabSize(4);
-
-        // 设置只读（true时只读，用于展示代码）
         editor.setReadOnly(false);
 
-        // 启用提示菜单
         ace.require("ace/ext/language_tools");
         editor.setOptions({
             enableBasicAutocompletion: true,
@@ -190,75 +446,18 @@
             enableLiveAutocompletion: true
         });
 
-        // function submit() {
-        //     // 收集当前页面的有关数据, 1. 题号 2.代码
-        //     var code = editor.getSession().getValue();
-
-        //     var number = $(".container .part1 .left_desc h3 #number").text();
-
-        //     var judge_url = "/judge/" + number;
-
-        //     // 构建json，并通过ajax向后台发起基于http的json请求
-        //     $.ajax({
-        //         method: 'Post',   // 向后端发起请求的方式
-        //         url: judge_url,   // 向后端指定的url发起请求
-        //         dataType: 'json', // 告知server，我需要什么格式
-        //         contentType: 'application/json;charset=utf-8',  // 告知server，我给你的是什么格式
-        //         data: JSON.stringify({
-        //             'code': code,
-        //             'input': ''
-        //         }),
-        //         success: function (data) {
-        //             //成功得到结果
-        //             // console.log(data);
-        //             show_result(data);
-        //         }
-        //     });
-        //     // 3. 得到结果，解析并显示到 result中
-        //     function show_result(data) {
-        //         // console.log(data.status);
-        //         // console.log(data.reason);
-        //         // 拿到result结果标签
-        //         var result_div = $(".container .part2 .result");
-        //         // 清空上一次的运行结果
-        //         result_div.empty();
-
-        //         // 首先拿到结果的状态码和原因结果
-        //         var _status = data.status;
-        //         var _reason = data.reason;
-
-        //         var reason_lable = $("<p>", {
-        //             text: _reason
-        //         });
-        //         reason_lable.appendTo(result_div);
-
-        //         if (status == 0) {
-        //             // 请求是成功的，编译运行过程没出问题，但是结果是否通过看测试用例的结果
-        //             var _stdout = data.stdout;
-        //             var _stderr = data.stderr;
-
-        //             var stdout_lable = $("<pre>", {
-        //                 text: _stdout
-        //             });
-
-        //             var stderr_lable = $("<pre>", {
-        //                 text: _stderr
-        //             })
-
-        //             stdout_lable.appendTo(result_div);
-        //             stderr_lable.appendTo(result_div);
-        //         }
-        //     }
-        // }
-
-
         function submit() {
             // 收集当前页面的有关数据, 1. 题号 2.代码
             var code = editor.getSession().getValue();
-
-            var number = $(".container .part1 .left_desc h3 #number").text();
+            var number = $("#number").text();
+            console.log("题号:", number); // 调试输出
 
             var judge_url = "/judge/" + number;
+            console.log("judge_url:", judge_url); 
+
+            // 显示加载状态
+            var result_div = $(".result");
+            result_div.html("<p>正在评测中...</p>");
 
             // 构建json，并通过ajax向后台发起基于http的json请求
             $.ajax({
@@ -272,11 +471,13 @@
                 }),
                 success: function (data) {//成功得到结果
                     show_result(data);
+                },
+                error: function() {
+                    result_div.html("<p style='color:red'>评测请求失败，请稍后重试</p>");
                 }
             });
 
             function show_result(data) {
-                var result_div = $(".container .part2 .result");// 拿到result结果标签
                 result_div.empty();// 清空上一次的运行结果
 
                 // 首先拿到结果的状态码和原因结果
@@ -293,21 +494,171 @@
                     var _stdout = data.stdout;
                     var _stderr = data.stderr;
 
-                    var stdout_lable = $("<pre>", {
-                        text: _stdout
-                    })
+                    if (_stdout) {
+                        var stdout_lable = $("<pre>", {
+                            text: _stdout
+                        });
+                        stdout_lable.appendTo(result_div);
+                    }
 
-                    var stderr_lable = $("<pre>", {
-                        text: _stderr
-                    })
-
-                    stdout_lable.appendTo(result_div);
-                    stderr_lable.appendTo(result_div);
+                    if (_stderr) {
+                        var stderr_lable = $("<pre>", {
+                            text: _stderr,
+                            style: "color: #cc0000;"
+                        });
+                        stderr_lable.appendTo(result_div);
+                    }
                 }
             }
+        }
 
+        // 使用 marked.js 渲染 Markdown 内容
+        function renderMarkdown() {
+            // 配置 marked 选项
+            marked.setOptions({
+                highlight: function(code, lang) {
+                    if (lang && hljs.getLanguage(lang)) {
+                        return hljs.highlight(code, { language: lang }).value;
+                    }
+                    return hljs.highlightAuto(code).value;
+                },
+                breaks: true,        // 允许换行符转换为 <br>
+                gfm: true,           // 启用 GitHub 风格的 Markdown
+                headerIds: true,     // 为标题添加 id
+                mangle: false,       // 不转义内联 HTML
+                sanitize: false,     // 不净化输出
+                smartLists: true,    // 使用更智能的列表行为
+                smartypants: true,   // 使用更智能的标点符号
+                xhtml: false         // 不使用自闭合标签
+            });
+            
+            // 获取原始 Markdown 内容
+            const markdownContent = $("#markdown-desc");
+            const rawMarkdown = markdownContent.text();
+            
+            // 将 Markdown 转换为 HTML 并插入页面
+            markdownContent.html(marked.parse(rawMarkdown));
+            
+            // 初始化代码高亮
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        }
+
+        $(document).ready(function() {
+            renderMarkdown();
+        });
+
+        const resizer = document.getElementById('dragMe');
+        const leftPanel = document.querySelector('.left-desc');
+        const rightPanel = document.querySelector('.right-code');
+        const container = document.querySelector('.code-container');
+        
+        let isResizing = false;
+        
+        function initResizer() {
+            if (window.innerWidth <= 768) {
+                resizer.style.display = 'none';
+                return;
+            }
+            
+            resizer.style.display = 'block';
+            const containerRect = container.getBoundingClientRect();
+            const leftRect = leftPanel.getBoundingClientRect();
+            const leftPercentage = (leftRect.width / containerRect.width) * 100;
+            resizer.style.left = `calc(${leftPercentage}% - 5px)`;
+        }
+        
+        window.addEventListener('load', initResizer);
+        window.addEventListener('resize', initResizer);
+        
+        resizer.addEventListener('mousedown', (e) => {
+            if (window.innerWidth <= 768) return;
+            
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', () => {
+                isResizing = false;
+                document.body.style.cursor = 'default';
+                document.removeEventListener('mousemove', handleMouseMove);
+            });
+        });
+        
+        function handleMouseMove(e) {
+            if (!isResizing || window.innerWidth <= 768) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const containerWidth = containerRect.width;
+            const mouseX = e.clientX - containerRect.left;
+            
+            let leftPercentage = (mouseX / containerWidth) * 100;
+            
+            leftPercentage = Math.max(20, Math.min(80, leftPercentage));
+            
+            leftPanel.style.flex = `0 0 ${leftPercentage}%`;
+            rightPanel.style.flex = `0 0 ${100 - leftPercentage}%`;
+            
+            resizer.style.left = `calc(${leftPercentage}% - 5px)`;
+        }
+
+        const submitSection = document.getElementById('submitSection');
+        const submitResizer = document.getElementById('submitDragMe');
+        const showSubmitBtn = document.getElementById('showSubmitBtn');
+        
+        let isSubmitResizing = false;
+        let initialSubmitHeight = 0;
+        let startY = 0;
+        const minHeight = 50; // 最小高度，低于此高度时隐藏
+        
+        function initSubmitResizer() {
+            initialSubmitHeight = submitSection.offsetHeight;
+        }
+        
+        window.addEventListener('load', initSubmitResizer);
+        window.addEventListener('resize', initSubmitResizer);
+        
+        submitResizer.addEventListener('mousedown', (e) => {
+            isSubmitResizing = true;
+            startY = e.clientY;
+            document.body.style.cursor = 'row-resize';
+            document.addEventListener('mousemove', handleSubmitMouseMove);
+            document.addEventListener('mouseup', handleSubmitMouseUp);
+        });
+        
+        function handleSubmitMouseMove(e) {
+            if (!isSubmitResizing) return;
+            const deltaY = e.clientY - startY;
+            const newHeight = initialSubmitHeight - deltaY;
+            
+            if (newHeight < minHeight) {
+                submitSection.style.display = 'none';
+                showSubmitBtn.style.display = 'block';
+            } else {
+                submitSection.style.display = 'flex';
+                submitSection.style.height = `${newHeight}px`;
+                showSubmitBtn.style.display = 'none';
+            }
+        }
+        
+        function handleSubmitMouseUp() {
+            isSubmitResizing = false;
+            document.body.style.cursor = 'default';
+            document.removeEventListener('mousemove', handleSubmitMouseMove);
+            
+            if (submitSection.offsetHeight < minHeight) {
+                submitSection.style.display = 'none';
+                showSubmitBtn.style.display = 'block';
+            } else {
+                initialSubmitHeight = submitSection.offsetHeight;
+            }
+        }
+
+        function showSubmitSection() {
+            submitSection.style.display = 'flex';
+            submitSection.style.height = `${initialSubmitHeight}px`;
+            showSubmitBtn.style.display = 'none';
         }
     </script>
 </body>
-
 </html>
