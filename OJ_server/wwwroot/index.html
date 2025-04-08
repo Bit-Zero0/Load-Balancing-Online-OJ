@@ -1,133 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>在线编程平台</title>
-    <link rel="stylesheet" href="/template_html/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>蓝紫主题OJ系统</title>
     <style>
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            max-width: 900px;
-            margin: 0 auto;
+        :root {
+            /* 基础色板 */
+            --primary-dark: #2A2D43;
+            --primary-accent: #5F6CAF;
+            --primary-light: #A5A8D0;
+            --primary-bg: #F8F9FF;
+            --success: #4CAF82;
+            --warning: #FFC107;
+            
+            /* 深色模式 */
+            --dark-bg: #1A1C2B;
+            --dark-text: #E0E0E0;
+            --dark-accent: #7986CB;
+
+            /* 衍生变量 */
+            --header-height: 60px;
+            --radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .hero-section {
-            text-align: center;
-            padding: 60px 20px;
-            border-radius: 10px;
-            background-color: var(--secondary-bg);
-            box-shadow: 0 5px 15px var(--shadow-color);
-            width: 100%;
-            transition: background-color 0.3s, box-shadow 0.3s;
+        /* 深色模式覆盖 */
+        [data-theme="dark"] {
+            --primary-bg: var(--dark-bg);
+            --primary-dark: var(--dark-text);
+            --primary-accent: var(--dark-accent);
         }
 
-        .hero-section h1 {
-            font-size: 2.5rem;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.2s;
+        }
+
+        body {
+            background: var(--primary-bg);
             color: var(--primary-dark);
-            margin-bottom: 20px;
-            transition: color 0.3s;
-        }
-
-        .hero-section p {
-            font-size: 1.2rem;
-            color: var(--text-color);
-            margin-bottom: 30px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             line-height: 1.6;
-            transition: color 0.3s;
         }
 
-        .cta-button {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: var(--primary-green);
+        /* 导航栏 */
+        .nav {
+            height: var(--header-height);
+            background: var(--primary-dark);
+            padding: 0 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .nav__link {
             color: var(--primary-bg);
             text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
         }
 
-        .cta-button:hover {
-            background-color: var(--primary-dark);
+        .nav__link:hover {
+            background: var(--primary-accent);
             transform: translateY(-2px);
-            box-shadow: 0 6px 8px var(--shadow-color);
+        }
+
+        /* 主内容区 */
+        .hero {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .hero__title {
+            font-size: 3rem;
+            color: var(--primary-accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero__desc {
+            color: var(--primary-dark);
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        [data-theme="dark"] .hero__desc {
+            color: var(--dark-text);
+        }
+
+        /* CTA按钮 */
+        .cta {
+            display: inline-flex;
+            padding: 1rem 2.5rem;
+            background: var(--success);
+            color: white;
+            border-radius: var(--radius);
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(76, 175, 130, 0.2);
+        }
+
+        .cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(76, 175, 130, 0.3);
+        }
+
+        /* 主题切换 */
+        .theme-toggle {
+            background: var(--primary-accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            filter: brightness(1.1);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 0 1rem;
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+
+            .nav__link {
+                margin: 0.5rem 0;
+            }
+
+            .hero__title {
+                font-size: 2.25rem;
+            }
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="navbar">
-            <div class="nav-links">
-                <a href="/">首页</a>
-                <a href="/all_questions">题库</a>
-                <a href="#">竞赛</a>
-                <a href="#">讨论</a>
-                <a href="#">求职</a>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-sun"></i>
-                </button>
-                <a href="#">登录</a>
-            </div>
+    <nav class="nav">
+        <div class="nav__group">
+            <a href="/" class="nav__link">首页</a>
+            <a href="/all_questions" class="nav__link">题库</a>
         </div>
-        
-        <div class="content">
-            <div class="hero-section">
-                <h1>欢迎来到在线编程平台</h1>
-                <p>这是一个专为编程爱好者打造的在线评测系统，提供丰富的编程题目和实时评测功能。</p>
-                <a class="cta-button" href="/all_questions">开始编程之旅</a>
-            </div>
+        <div class="nav__group">
+            <button class="theme-toggle" onclick="toggleTheme()">主题切换</button>
         </div>
-        
-        <div class="footer">
-            <h4>© 2023 在线编程平台 - 让编程更简单</h4>
-        </div>
-    </div>
+    </nav>
+
+    <main class="hero">
+        <h1 class="hero__title">欢迎来到Feng-Bit OJ</h1>
+        <p class="hero__desc">基于现代Web技术构建的编程评测平台，提供优雅的代码编辑体验和实时评测功能，助您提升算法能力。</p>
+        <a href="/all_questions" class="cta">开始挑战 →</a>
+    </main>
 
     <script>
-        // 主题切换功能
-        const themeToggle = document.getElementById('themeToggle');
-        const icon = themeToggle.querySelector('i');
-        
-        // 检查本地存储中的主题设置
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        
-        // 更新图标
-        updateIcon();
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            
-            updateIcon();
-        });
-        
-        function updateIcon() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                icon.className = 'fas fa-moon';
-            } else {
-                icon.className = 'fas fa-sun';
-            }
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
         }
+
+        // 初始化主题
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 </body>
-
 </html>

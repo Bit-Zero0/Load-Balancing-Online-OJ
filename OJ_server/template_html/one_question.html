@@ -18,10 +18,18 @@
     <title>{{number}}.{{title}}</title>
     <style>
         :root {
-            --primary-dark: #27445D;
-            --primary-green: #497D74;
-            --primary-light: #71BBB2;
-            --primary-bg: #EFE9D5;
+            /* 基础色板 - 蓝紫色调 */
+            --primary-dark: #2A2D43;
+            --primary-accent: #5F6CAF;
+            --primary-light: #A5A8D0;
+            --primary-bg: #F8F9FF;
+            --success: #4CAF82;
+            --warning: #FFC107;
+            
+            /* 深色模式变量 */
+            --dark-bg: #1A1C2B;
+            --dark-text: #E0E0E0;
+            --dark-accent: #7986CB;
         }
 
         * {
@@ -36,48 +44,74 @@
             color: var(--primary-dark);
         }
 
+        [data-theme="dark"] body {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
         .navbar {
             background-color: var(--primary-dark);
-            padding: 10px 20px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
+
+        [data-theme="dark"] .navbar {
+            background-color: var(--dark-bg);
+        }
+
 
         .navbar a {
             color: var(--primary-bg);
             text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin: 0 4px;
         }
 
         .navbar a:hover {
-            background-color: var(--primary-green);
+            background-color: var(--primary-accent);
+            transform: translateY(-1px);
         }
 
         .navbar .login {
             background-color: var(--primary-green);
         }
 
-        .container {
+        /* .container {
             width: 100%;
             max-width: 95%;
             margin: 0 auto;
             padding: 20px;
             position: relative;
             height: calc(100vh - 60px);
+        } */
+
+        .container {
+            width: 95%;
+            margin: 0 auto;
+            padding: 24px;
+            height: calc(100vh - 68px);
         }
 
-        .code-container {
+        /* .code-container {
             display: flex;
             gap: 6px;
             margin-top: 20px;
             position: relative;
             height: calc(100% - 100px);
+        } */
+
+        .code-container {
+            display: flex;
+            gap: 10px;
+            height: calc(100% - 120px);
+            position: relative;
         }
 
-        .left-desc {
+        /* .left-desc {
             flex: 1;
             background-color: var(--secondary-bg);
             padding: 20px;
@@ -89,15 +123,32 @@
             height: 100%;
             width: 45%;
             transition: background-color 0.3s, box-shadow 0.3s;
+        } */
+
+        .left-desc {
+            flex: 1;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: auto;
+            transition: all 0.3s ease;
         }
 
-        .left-desc h3 {
+        [data-theme="dark"] .left-desc {
+            background-color: #252838;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        /* todo */
+        /* .left-desc h3 {
             color: var(--primary-dark);
             margin-bottom: 15px;
             border-bottom: 2px solid var(--primary-light);
             padding-bottom: 10px;
             transition: color 0.3s, border-color 0.3s;
-        }
+        } */
 
         .left-desc pre {
             font-family: 'Courier New', Courier, monospace;
@@ -108,7 +159,7 @@
             overflow-wrap: break-word;
         }
 
-        .right-code {
+        /* .right-code {
             flex: 1;
             background-color: var(--primary-light);
             border-radius: 8px;
@@ -118,13 +169,27 @@
             height: 100%;
             width: 45%;
             transition: background-color 0.3s, box-shadow 0.3s;
+        } */
+
+        .right-code {
+            flex: 1;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .right-code {
+            background-color: #252838;
         }
 
         .ace_editor {
+            border-radius: 8px;
             height: 100% !important;
         }
 
-        .submit-section {
+        /* .submit-section {
             position: absolute;
             bottom: 20px;
             left: 20px;
@@ -139,9 +204,31 @@
             z-index: 10;
             transition: all 0.3s ease;
             background-color: #71BBB2;
+        } */
+
+        .submit-section {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+            display: flex;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
 
-        .result {
+        [data-theme="dark"] .submit-section {
+            background-color: #252838;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+
+        /* .result {
             background-color: var(--primary-bg);
             padding: 15px;
             border-radius: 8px;
@@ -150,9 +237,23 @@
             height: auto;
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        } */
+
+        .result {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.03);
+            min-height: 60px;
+            color: var(--primary-dark);
         }
 
-        .btn-submit {
+        [data-theme="dark"] .result {
+            background: rgba(255,255,255,0.05);
+            color: var(--dark-text);
+        }
+
+        /* .btn-submit {
             background-color: var(--primary-green);
             color: var(--primary-bg);
             border: none;
@@ -161,10 +262,28 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s, color 0.3s;
+        } */
+
+        .btn-submit {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        .btn-submit:hover {
+        /* .btn-submit:hover {
             background-color: var(--primary-dark);
+        } */
+
+        .btn-submit:hover {
+            background-color: #3D8B6F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76,175,130,0.3);
         }
 
         .show-submit-btn {
@@ -256,7 +375,8 @@
         }
         
         .markdown-content pre {
-            background-color: var(--code-bg);
+            /* background-color: var(--code-bg); */
+            background: var(--primary-dark);
             padding: 1em;
             border-radius: 5px;
             overflow-x: auto;
@@ -332,14 +452,11 @@
         <div class="nav-links">
             <a href="/">首页</a>
             <a href="/all_questions">题库</a>
-            <a href="#">竞赛</a>
-            <a href="#">讨论</a>
         </div>
         <div style="display: flex; align-items: center;">
             <button class="theme-toggle" id="themeToggle">
                 <i class="fas fa-sun"></i>
             </button>
-            <a href="#">登录</a>
         </div>
     </div>
 

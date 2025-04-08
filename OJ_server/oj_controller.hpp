@@ -128,8 +128,7 @@ namespace ns_controller
                 StringUtil::SplitString(line, &tokens, ":");
                 if (tokens.size() != 2)
                 {
-                    LOG(WARNNING) << " 切分 " << line << " 失败"
-                                  << "\n";
+                    LOG(WARNNING) << " 切分配置 " << line << " 失败" << "\n";
                     continue;
                 }
 

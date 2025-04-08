@@ -1,6 +1,7 @@
 .PHONY:all
 all:
 	@cd compile_server;\
+	mkdir temp;\
 	make;\
 	cd -;\
 	cd OJ_server;\

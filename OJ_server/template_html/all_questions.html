@@ -1,146 +1,244 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>在线编程平台 - 题目列表</title>
-    <link rel="stylesheet" href="/template_html/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Feng-Bit OJ</title>
     <style>
-        .question_list {
-            flex: 1;
-            width: 100%;
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
+        :root {
+            /* 基础色板 */
+            --primary-dark: #2A2D43;
+            --primary-accent: #5F6CAF;
+            --primary-light: #A5A8D0;
+            --primary-bg: #F8F9FF;
+            --success: #4CAF82;
+            --warning: #FFC107;
+
+            /* 深色模式 */
+            --dark-bg: #1A1C2B;
+            --dark-text: #E0E0E0;
+            --dark-accent: #7986CB;
+
+            /* 通用变量 */
+            --radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .question_list h1 {
+        /* 深色模式覆盖 */
+        [data-theme="dark"] {
+            --primary-bg: var(--dark-bg);
+            --primary-dark: var(--dark-text);
+            --primary-accent: var(--dark-accent);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.2s;
+        }
+
+        body {
+            background: var(--primary-bg);
             color: var(--primary-dark);
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
-            transition: color 0.3s;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
         }
 
-        .question_list table {
+        /* 导航栏 */
+        .navbar {
+            background: var(--primary-dark);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-link {
+            color: var(--primary-light);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--radius);
+            transition: transform 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-accent);
+            transform: translateY(-2px);
+        }
+
+        /* 主内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* 题目表格 */
+        .question-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
+            background: var(--primary-bg);
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: 0 5px 15px var(--shadow-color);
-            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: var(--shadow);
         }
 
-        .question_list table th {
-            background-color: var(--primary-light);
-            color: var(--primary-bg);
-            padding: 15px;
+        .question-table th {
+            background: var(--primary-accent);
+            color: white;
+            padding: 1rem;
             text-align: left;
-            font-weight: 600;
-            transition: background-color 0.3s, color 0.3s;
         }
 
-        .question_list table td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-color);
-            transition: border-color 0.3s, color 0.3s;
+        .question-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--primary-light);
         }
 
-        .question_list table tr:last-child td {
-            border-bottom: none;
+        .question-table tr:hover {
+            background: rgba(95, 108, 175, 0.05);
         }
 
-        .question_list table tr:hover {
-            background-color: var(--primary-bg);
-            transition: background-color 0.3s;
+        /* 难度标签 */
+        .difficulty {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9em;
         }
 
-        .question_list table .item a {
+        .difficulty.easy {
+            background: rgba(76, 175, 130, 0.15);
+            color: var(--success);
+        }
+
+        .difficulty.medium {
+            background: rgba(255, 193, 7, 0.15);
+            color: var(--warning);
+        }
+
+        .difficulty.hard {
+            background: rgba(198, 40, 40, 0.15);
+            color: #C62828;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            background: var(--primary-accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .nav-link {
+                margin: 0.3rem 0;
+            }
+        }
+
+        .question-link {
+            color: var(--link-normal);
             text-decoration: none;
-            color: var(--primary-light);
-            font-weight: 500;
-            transition: color 0.3s;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .question_list table .item a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
+        .question-link:hover {
+            color: var(--link-hover);
+            text-decoration: none;
+        }
+
+        /* 下划线动画效果 */
+        .question-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+
+        .question-link:hover::after {
+            width: 100%;
+        }
+
+        /* 已访问链接处理 */
+        .question-link:visited {
+            color: var(--link-visited);
+        }
+
+        [data-theme="dark"] .question-table tr:hover {
+            background: var(--dark-row-hover);
+        }
+
+        /* 暗夜模式下的焦点轮廓优化 */
+        [data-theme="dark"] .question-link:focus {
+            outline: 2px solid rgba(165, 180, 252, 0.5);
+            outline-offset: 2px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="navbar">
-            <div class="nav-links">
-                <a href="/">首页</a>
-                <a href="/all_questions">题库</a>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-sun"></i>
-                </button>
-            </div>
+    <nav class="navbar">
+        <div class="nav-group">
+            <a href="/" class="nav-link">首页</a>
+            <a href="/questions" class="nav-link">题库</a>
         </div>
-        
-        <div class="question_list">
-            <h1>编程题目列表</h1>
-            <table>
+        <div class="nav-group">
+            <button class="theme-toggle" onclick="toggleTheme()">切换主题</button>
+            <a href="/login" class="nav-link">登录</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1 class="page-title">编程题库</h1>
+        <table class="question-table">
+            <thead>
                 <tr>
-                    <th class="item">编号</th>
-                    <th class="item">标题</th>
-                    <th class="item">难度</th>
+                    <th>#</th>
+                    <th>题目名称</th>
+                    <th>难度</th>
                 </tr>
+            </thead>
+            <tbody>
                 {{#question_list}}
                 <tr>
-                    <td class="item">{{number}}</td>
-                    <td class="item"><a href="/question/{{number}}">{{title}}</a></td>
-                    <td class="item">{{star}}</td>
+                    <td>{{number}}</td>
+                    <td><a href="/question/{{number}}" class="question-link">{{title}}</a></td>
+                    <td><span class="difficulty easy">简单</span></td>
                 </tr>
                 {{/question_list}}
-            </table>
-        </div>
-        
-        <div class="footer">
-            <h4>© 2023 在线编程平台 - 让编程更简单</h4>
-        </div>
-    </div>
+            </tbody>
+        </table>
+    </main>
 
     <script>
-        // 主题切换功能
-        const themeToggle = document.getElementById('themeToggle');
-        const icon = themeToggle.querySelector('i');
-        
-        // 检查本地存储中的主题设置
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        
-        // 更新图标
-        updateIcon();
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            
-            updateIcon();
-        });
-        
-        function updateIcon() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                icon.className = 'fas fa-moon';
-            } else {
-                icon.className = 'fas fa-sun';
-            }
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+
+            // 同步保存用户偏好
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
         }
+
+        // 初始化主题
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 </body>
 
