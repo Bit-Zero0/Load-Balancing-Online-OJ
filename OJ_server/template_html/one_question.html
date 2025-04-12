@@ -1,470 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{number}}.{{title}}</title>
+    
+    <!-- 外部依赖 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/lib/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/lib/languages/cpp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ext-language_tools.js"></script>
-    <!-- <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script> -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.min.css" id="hljs-light">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="/template_html/style.css">
+    
+    <!-- 代码高亮样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.min.css"
+        id="hljs-light">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github-dark.min.css"
+        id="hljs-dark" disabled>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>{{number}}.{{title}}</title>
-    <style>
-        :root {
-            /* 基础色板 - 蓝紫色调 */
-            --primary-dark: #2A2D43;
-            --primary-accent: #5F6CAF;
-            --primary-light: #A5A8D0;
-            --primary-bg: #F8F9FF;
-            --success: #4CAF82;
-            --warning: #FFC107;
-            
-            /* 深色模式变量 */
-            --dark-bg: #1A1C2B;
-            --dark-text: #E0E0E0;
-            --dark-accent: #7986CB;
-        }
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/judge.css">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--primary-dark);
-        }
-
-        [data-theme="dark"] body {
-            background-color: var(--dark-bg);
-            color: var(--dark-text);
-        }
-
-        .navbar {
-            background-color: var(--primary-dark);
-            padding: 12px 24px;
-            display: flex;
-            justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        [data-theme="dark"] .navbar {
-            background-color: var(--dark-bg);
-        }
-
-
-        .navbar a {
-            color: var(--primary-bg);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            margin: 0 4px;
-        }
-
-        .navbar a:hover {
-            background-color: var(--primary-accent);
-            transform: translateY(-1px);
-        }
-
-        .navbar .login {
-            background-color: var(--primary-green);
-        }
-
-        /* .container {
-            width: 100%;
-            max-width: 95%;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            height: calc(100vh - 60px);
-        } */
-
-        .container {
-            width: 95%;
-            margin: 0 auto;
-            padding: 24px;
-            height: calc(100vh - 68px);
-        }
-
-        /* .code-container {
-            display: flex;
-            gap: 6px;
-            margin-top: 20px;
-            position: relative;
-            height: calc(100% - 100px);
-        } */
-
-        .code-container {
-            display: flex;
-            gap: 10px;
-            height: calc(100% - 120px);
-            position: relative;
-        }
-
-        /* .left-desc {
-            flex: 1;
-            background-color: var(--secondary-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-            min-width: 250px;
-            overflow: auto;
-            word-wrap: break-word;
-            height: 100%;
-            width: 45%;
-            transition: background-color 0.3s, box-shadow 0.3s;
-        } */
-
-        .left-desc {
-            flex: 1;
-            background: white;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            overflow: auto;
-            transition: all 0.3s ease;
-        }
-
-        [data-theme="dark"] .left-desc {
-            background-color: #252838;
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        /* todo */
-        /* .left-desc h3 {
-            color: var(--primary-dark);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 10px;
-            transition: color 0.3s, border-color 0.3s;
-        } */
-
-        .left-desc pre {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 16px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        /* .right-code {
-            flex: 1;
-            background-color: var(--primary-light);
-            border-radius: 8px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-            padding: 4px;
-            min-width: 250px;
-            height: 100%;
-            width: 45%;
-            transition: background-color 0.3s, box-shadow 0.3s;
-        } */
-
-        .right-code {
-            flex: 1;
-            background: white;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-
-        [data-theme="dark"] .right-code {
-            background-color: #252838;
-        }
-
-        .ace_editor {
-            border-radius: 8px;
-            height: 100% !important;
-        }
-
-        /* .submit-section {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--secondary-bg);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-            z-index: 10;
-            transition: all 0.3s ease;
-            background-color: #71BBB2;
-        } */
-
-        .submit-section {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 20px;
-            display: flex;
-            gap: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        [data-theme="dark"] .submit-section {
-            background-color: #252838;
-            border-color: rgba(255,255,255,0.1);
-        }
-
-
-        /* .result {
-            background-color: var(--primary-bg);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-            width: 76%;
-            height: auto;
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-        } */
-
-        .result {
-            flex: 1;
-            padding: 12px;
-            border-radius: 6px;
-            background: rgba(0,0,0,0.03);
-            min-height: 60px;
-            color: var(--primary-dark);
-        }
-
-        [data-theme="dark"] .result {
-            background: rgba(255,255,255,0.05);
-            color: var(--dark-text);
-        }
-
-        /* .btn-submit {
-            background-color: var(--primary-green);
-            color: var(--primary-bg);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        } */
-
-        .btn-submit {
-            background-color: var(--success);
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        /* .btn-submit:hover {
-            background-color: var(--primary-dark);
-        } */
-
-        .btn-submit:hover {
-            background-color: #3D8B6F;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(76,175,130,0.3);
-        }
-
-        .show-submit-btn {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--primary-green);
-            color: var(--primary-bg);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-            display: none;
-            z-index: 10;
-        }
-
-        .show-submit-btn:hover {
-            background-color: var(--primary-light);
-        }
-
-        @media (max-width: 768px) {
-            .code-container {
-                flex-direction: column;
-            }
-
-            .submit-section {
-                position: static;
-                flex-direction: column;
-                gap: 15px;
-                margin-top: 20px;
-            }
-
-            .result {
-                width: 100%;
-            }
-
-            .resizer {
-                display: none !important;
-            }
-        }
-
-        .resizer {
-            width: 10px;
-            height: 100%;
-            background-color: var(--primary-dark);
-            cursor: col-resize;
-            opacity: 0.5;
-            transition: opacity 0.3s, background-color 0.3s;
-            position: absolute;
-            top: 0;
-            z-index: 10;
-            border-radius: 4px;
-        }
-        
-        .resizer:hover {
-            opacity: 0.8;
-        }
-
-        .markdown-content {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            transition: color 0.3s;
-        }
-        
-        .markdown-content h1, 
-        .markdown-content h2, 
-        .markdown-content h3, 
-        .markdown-content h4 {
-            margin-top: 1.5em;
-            margin-bottom: 0.5em;
-            color: var(--primary-dark);
-            transition: color 0.3s;
-        }
-        
-        .markdown-content p {
-            margin-bottom: 1em;
-        }
-        
-        .markdown-content code {
-            background-color: var(--code-bg);
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: 'Courier New', Courier, monospace;
-            transition: background-color 0.3s;
-        }
-        
-        .markdown-content pre {
-            /* background-color: var(--code-bg); */
-            background: var(--primary-dark);
-            padding: 1em;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 1em 0;
-            transition: background-color 0.3s;
-        }
-        
-        .markdown-content pre code {
-            background-color: transparent;
-            padding: 0;
-        }
-        
-        .markdown-content ul, 
-        .markdown-content ol {
-            margin-left: 2em;
-            margin-bottom: 1em;
-        }
-        
-        .markdown-content blockquote {
-            border-left: 4px solid var(--primary-light);
-            padding-left: 1em;
-            margin-left: 0;
-            color: var(--text-color);
-            opacity: 0.8;
-            transition: border-color 0.3s, color 0.3s;
-        }
-        
-        .markdown-content img {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .markdown-content table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 1em;
-        }
-        
-        .markdown-content th, 
-        .markdown-content td {
-            border: 1px solid var(--border-color);
-            padding: 8px;
-            text-align: left;
-            transition: border-color 0.3s;
-        }
-        
-        .markdown-content th {
-            background-color: var(--primary-light);
-            color: var(--primary-bg);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .submit-resizer {
-            width: 100%;
-            height: 6px;
-            background-color: var(--primary-dark);
-            cursor: row-resize;
-            opacity: 0.5;
-            transition: opacity 0.3s, background-color 0.3s;
-            position: absolute;
-            top: 0;
-            z-index: 10;
-        }
-        
-        .submit-resizer:hover {
-            opacity: 0.8;
-        }
-    </style>
+    <script>
+        // 配置marked选项
+        marked.setOptions({
+            breaks: true,      // 允许换行符转换为<br>
+            gfm: true,        // 启用GitHub风格的Markdown
+            headerIds: true,   // 为标题添加id
+            mangle: false,     // 不转义内联HTML
+            sanitize: false    // 不净化输出
+        });
+    </script>
 </head>
 
 <body>
-    <div class="navbar">
+    <nav class="navbar">
         <div class="nav-links">
-            <a href="/">首页</a>
-            <a href="/all_questions">题库</a>
+            <a href="/" class="nav-link">首页</a>
+            <a href="/all_questions" class="nav-link">题库</a>
         </div>
-        <div style="display: flex; align-items: center;">
+        <div class="nav-right">
             <button class="theme-toggle" id="themeToggle">
                 <i class="fas fa-sun"></i>
             </button>
         </div>
-    </div>
+    </nav>
 
     <div class="container">
         <div class="code-container">
             <div class="left-desc">
-                <h3><span id="number">{{number}}</span>.{{title}}_{{star}}</h3>
-                <div id="markdown-desc" class="markdown-content">{{desc}}</div>
+                <h3><span id="number">{{number}}</span>.{{title}}-{{star}}</h3>
+                <div id="markdown-content" class="markdown-content">{{desc}}</div>
             </div>
             <div class="resizer" id="dragMe"></div>
             <div class="right-code">
@@ -480,302 +71,37 @@
         <button class="show-submit-btn" id="showSubmitBtn" onclick="showSubmitSection()">显示提交区域</button>
     </div>
 
+    <!-- 自定义脚本 -->
+    <script src="/js/app.js"></script>
+    <script src="/js/judge.js"></script>
+    
+    <!-- 确保主题切换功能初始化 -->
     <script>
-        // 主题切换功能
-        const themeToggle = document.getElementById('themeToggle');
-        const icon = themeToggle.querySelector('i');
-        const hljsLight = document.getElementById('hljs-light');
-        const hljsDark = document.getElementById('hljs-dark');
-        
-        // 检查本地存储中的主题设置
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        
-        // 更新代码高亮样式
-        if (currentTheme === 'dark') {
-            hljsLight.disabled = true;
-            hljsDark.disabled = false;
-        } else {
-            hljsLight.disabled = false;
-            hljsDark.disabled = true;
-        }
-        
-        // 更新图标
-        updateIcon();
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            
-            // 切换代码高亮样式
-            if (newTheme === 'dark') {
-                hljsLight.disabled = true;
-                hljsDark.disabled = false;
-            } else {
-                hljsLight.disabled = false;
-                hljsDark.disabled = true;
+        document.addEventListener('DOMContentLoaded', function() {
+            // 手动初始化主题
+            if (typeof initTheme === 'function') {
+                initTheme();
             }
             
-            // 更新编辑器主题
-            if (newTheme === 'dark') {
-                editor.setTheme("ace/theme/monokai");
-            } else {
-                editor.setTheme("ace/theme/chrome");
+            // 确保主题切换按钮可点击
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.style.pointerEvents = 'auto';
+                themeToggle.style.cursor = 'pointer';
             }
-            
-            updateIcon();
-            
-            // 重新渲染Markdown内容以更新代码高亮
-            renderMarkdown();
-        });
-        
-        function updateIcon() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                icon.className = 'fas fa-moon';
-            } else {
-                icon.className = 'fas fa-sun';
-            }
-        }
 
-        // 初始化ACE编辑器
-        const editor = ace.edit("code");
-        
-        // 根据当前主题设置编辑器主题
-        if (currentTheme === 'dark') {
-            editor.setTheme("ace/theme/monokai");
-        } else {
-            editor.setTheme("ace/theme/chrome");
-        }
-        
-        editor.session.setMode("ace/mode/c_cpp");
-        editor.setFontSize(16);
-        editor.getSession().setTabSize(4);
-        editor.setReadOnly(false);
-
-        ace.require("ace/ext/language_tools");
-        editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: true
-        });
-
-        function submit() {
-            // 收集当前页面的有关数据, 1. 题号 2.代码
-            var code = editor.getSession().getValue();
-            var number = $("#number").text();
-            console.log("题号:", number); // 调试输出
-
-            var judge_url = "/judge/" + number;
-            console.log("judge_url:", judge_url); 
-
-            // 显示加载状态
-            var result_div = $(".result");
-            result_div.html("<p>正在评测中...</p>");
-
-            // 构建json，并通过ajax向后台发起基于http的json请求
-            $.ajax({
-                method: 'Post',
-                url: judge_url,
-                dataType: 'json',
-                contentType: 'application/json;charset=utf-8',
-                data: JSON.stringify({
-                    'code': code,
-                    'input': ''
-                }),
-                success: function (data) {//成功得到结果
-                    show_result(data);
-                },
-                error: function() {
-                    result_div.html("<p style='color:red'>评测请求失败，请稍后重试</p>");
-                }
-            });
-
-            function show_result(data) {
-                result_div.empty();// 清空上一次的运行结果
-
-                // 首先拿到结果的状态码和原因结果
-                var _status = data.status;
-                var _reason = data.reason;
-
-                var reason_lable = $("<p>", {
-                    text: _reason
+            // 渲染Markdown内容
+            const content = document.getElementById('markdown-content');
+            if (content) {
+                const rawText = content.textContent;
+                content.innerHTML = marked.parse(rawText);
+                // 应用代码高亮
+                content.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
                 });
-                reason_lable.appendTo(result_div);
-
-                if (_status == 0) {
-                    // 请求是成功的，编译运行过程没出问题，但是结果是否通过看测试用例的结果
-                    var _stdout = data.stdout;
-                    var _stderr = data.stderr;
-
-                    if (_stdout) {
-                        var stdout_lable = $("<pre>", {
-                            text: _stdout
-                        });
-                        stdout_lable.appendTo(result_div);
-                    }
-
-                    if (_stderr) {
-                        var stderr_lable = $("<pre>", {
-                            text: _stderr,
-                            style: "color: #cc0000;"
-                        });
-                        stderr_lable.appendTo(result_div);
-                    }
-                }
             }
-        }
-
-        // 使用 marked.js 渲染 Markdown 内容
-        function renderMarkdown() {
-            // 配置 marked 选项
-            marked.setOptions({
-                highlight: function(code, lang) {
-                    if (lang && hljs.getLanguage(lang)) {
-                        return hljs.highlight(code, { language: lang }).value;
-                    }
-                    return hljs.highlightAuto(code).value;
-                },
-                breaks: true,        // 允许换行符转换为 <br>
-                gfm: true,           // 启用 GitHub 风格的 Markdown
-                headerIds: true,     // 为标题添加 id
-                mangle: false,       // 不转义内联 HTML
-                sanitize: false,     // 不净化输出
-                smartLists: true,    // 使用更智能的列表行为
-                smartypants: true,   // 使用更智能的标点符号
-                xhtml: false         // 不使用自闭合标签
-            });
-            
-            // 获取原始 Markdown 内容
-            const markdownContent = $("#markdown-desc");
-            const rawMarkdown = markdownContent.text();
-            
-            // 将 Markdown 转换为 HTML 并插入页面
-            markdownContent.html(marked.parse(rawMarkdown));
-            
-            // 初始化代码高亮
-            $('pre code').each(function(i, block) {
-                hljs.highlightBlock(block);
-            });
-        }
-
-        $(document).ready(function() {
-            renderMarkdown();
         });
-
-        const resizer = document.getElementById('dragMe');
-        const leftPanel = document.querySelector('.left-desc');
-        const rightPanel = document.querySelector('.right-code');
-        const container = document.querySelector('.code-container');
-        
-        let isResizing = false;
-        
-        function initResizer() {
-            if (window.innerWidth <= 768) {
-                resizer.style.display = 'none';
-                return;
-            }
-            
-            resizer.style.display = 'block';
-            const containerRect = container.getBoundingClientRect();
-            const leftRect = leftPanel.getBoundingClientRect();
-            const leftPercentage = (leftRect.width / containerRect.width) * 100;
-            resizer.style.left = `calc(${leftPercentage}% - 5px)`;
-        }
-        
-        window.addEventListener('load', initResizer);
-        window.addEventListener('resize', initResizer);
-        
-        resizer.addEventListener('mousedown', (e) => {
-            if (window.innerWidth <= 768) return;
-            
-            isResizing = true;
-            document.body.style.cursor = 'col-resize';
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', () => {
-                isResizing = false;
-                document.body.style.cursor = 'default';
-                document.removeEventListener('mousemove', handleMouseMove);
-            });
-        });
-        
-        function handleMouseMove(e) {
-            if (!isResizing || window.innerWidth <= 768) return;
-            
-            const containerRect = container.getBoundingClientRect();
-            const containerWidth = containerRect.width;
-            const mouseX = e.clientX - containerRect.left;
-            
-            let leftPercentage = (mouseX / containerWidth) * 100;
-            
-            leftPercentage = Math.max(20, Math.min(80, leftPercentage));
-            
-            leftPanel.style.flex = `0 0 ${leftPercentage}%`;
-            rightPanel.style.flex = `0 0 ${100 - leftPercentage}%`;
-            
-            resizer.style.left = `calc(${leftPercentage}% - 5px)`;
-        }
-
-        const submitSection = document.getElementById('submitSection');
-        const submitResizer = document.getElementById('submitDragMe');
-        const showSubmitBtn = document.getElementById('showSubmitBtn');
-        
-        let isSubmitResizing = false;
-        let initialSubmitHeight = 0;
-        let startY = 0;
-        const minHeight = 50; // 最小高度，低于此高度时隐藏
-        
-        function initSubmitResizer() {
-            initialSubmitHeight = submitSection.offsetHeight;
-        }
-        
-        window.addEventListener('load', initSubmitResizer);
-        window.addEventListener('resize', initSubmitResizer);
-        
-        submitResizer.addEventListener('mousedown', (e) => {
-            isSubmitResizing = true;
-            startY = e.clientY;
-            document.body.style.cursor = 'row-resize';
-            document.addEventListener('mousemove', handleSubmitMouseMove);
-            document.addEventListener('mouseup', handleSubmitMouseUp);
-        });
-        
-        function handleSubmitMouseMove(e) {
-            if (!isSubmitResizing) return;
-            const deltaY = e.clientY - startY;
-            const newHeight = initialSubmitHeight - deltaY;
-            
-            if (newHeight < minHeight) {
-                submitSection.style.display = 'none';
-                showSubmitBtn.style.display = 'block';
-            } else {
-                submitSection.style.display = 'flex';
-                submitSection.style.height = `${newHeight}px`;
-                showSubmitBtn.style.display = 'none';
-            }
-        }
-        
-        function handleSubmitMouseUp() {
-            isSubmitResizing = false;
-            document.body.style.cursor = 'default';
-            document.removeEventListener('mousemove', handleSubmitMouseMove);
-            
-            if (submitSection.offsetHeight < minHeight) {
-                submitSection.style.display = 'none';
-                showSubmitBtn.style.display = 'block';
-            } else {
-                initialSubmitHeight = submitSection.offsetHeight;
-            }
-        }
-
-        function showSubmitSection() {
-            submitSection.style.display = 'flex';
-            submitSection.style.height = `${initialSubmitHeight}px`;
-            showSubmitBtn.style.display = 'none';
-        }
     </script>
 </body>
+
 </html>

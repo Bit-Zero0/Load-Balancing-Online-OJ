@@ -3,73 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蓝紫主题OJ系统</title>
+    <title>Feng-Bit OJ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
-        :root {
-            /* 基础色板 */
-            --primary-dark: #2A2D43;
-            --primary-accent: #5F6CAF;
-            --primary-light: #A5A8D0;
-            --primary-bg: #F8F9FF;
-            --success: #4CAF82;
-            --warning: #FFC107;
-            
-            /* 深色模式 */
-            --dark-bg: #1A1C2B;
-            --dark-text: #E0E0E0;
-            --dark-accent: #7986CB;
-
-            /* 衍生变量 */
-            --header-height: 60px;
-            --radius: 8px;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* 深色模式覆盖 */
-        [data-theme="dark"] {
-            --primary-bg: var(--dark-bg);
-            --primary-dark: var(--dark-text);
-            --primary-accent: var(--dark-accent);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: background-color 0.3s, color 0.2s;
-        }
-
-        body {
-            background: var(--primary-bg);
-            color: var(--primary-dark);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            line-height: 1.6;
-        }
-
-        /* 导航栏 */
-        .nav {
-            height: var(--header-height);
-            background: var(--primary-dark);
-            padding: 0 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-        }
-
-        .nav__link {
-            color: var(--primary-bg);
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-
-        .nav__link:hover {
-            background: var(--primary-accent);
-            transform: translateY(-2px);
-        }
 
         /* 主内容区 */
         .hero {
@@ -102,9 +39,9 @@
             padding: 1rem 2.5rem;
             background: var(--success);
             color: white;
-            border-radius: var(--radius);
+            border-radius: 6px;
             text-decoration: none;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(76, 175, 130, 0.2);
         }
 
@@ -113,34 +50,9 @@
             box-shadow: 0 6px 12px rgba(76, 175, 130, 0.3);
         }
 
-        /* 主题切换 */
-        .theme-toggle {
-            background: var(--primary-accent);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .theme-toggle:hover {
-            filter: brightness(1.1);
-        }
 
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .nav {
-                padding: 0 1rem;
-                flex-direction: column;
-                height: auto;
-                padding: 1rem;
-            }
-
-            .nav__link {
-                margin: 0.5rem 0;
-            }
-
             .hero__title {
                 font-size: 2.25rem;
             }
@@ -148,13 +60,15 @@
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav__group">
-            <a href="/" class="nav__link">首页</a>
-            <a href="/all_questions" class="nav__link">题库</a>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="/" class="nav-link">首页</a>
+            <a href="/all_questions" class="nav-link">题库</a>
         </div>
-        <div class="nav__group">
-            <button class="theme-toggle" onclick="toggleTheme()">主题切换</button>
+        <div class="nav-right">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+            </button>
         </div>
     </nav>
 
@@ -164,17 +78,6 @@
         <a href="/all_questions" class="cta">开始挑战 →</a>
     </main>
 
-    <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-        }
-
-        // 初始化主题
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    </script>
+    <script src="/js/app.js"></script>
 </body>
 </html>

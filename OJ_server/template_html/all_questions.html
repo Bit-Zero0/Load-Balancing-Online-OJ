@@ -4,70 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feng-Bit OJ</title>
+    <title>题库 - Feng-Bit OJ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
-        :root {
-            /* 基础色板 */
-            --primary-dark: #2A2D43;
-            --primary-accent: #5F6CAF;
-            --primary-light: #A5A8D0;
-            --primary-bg: #F8F9FF;
-            --success: #4CAF82;
-            --warning: #FFC107;
-
-            /* 深色模式 */
-            --dark-bg: #1A1C2B;
-            --dark-text: #E0E0E0;
-            --dark-accent: #7986CB;
-
-            /* 通用变量 */
-            --radius: 8px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 深色模式覆盖 */
-        [data-theme="dark"] {
-            --primary-bg: var(--dark-bg);
-            --primary-dark: var(--dark-text);
-            --primary-accent: var(--dark-accent);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: background-color 0.3s, color 0.2s;
-        }
-
-        body {
-            background: var(--primary-bg);
-            color: var(--primary-dark);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            line-height: 1.6;
-        }
-
-        /* 导航栏 */
-        .navbar {
-            background: var(--primary-dark);
-            padding: 1rem 2rem;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .nav-link {
-            color: var(--primary-light);
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: var(--radius);
-            transition: transform 0.2s;
-        }
-
-        .nav-link:hover {
-            background: var(--primary-accent);
-            transform: translateY(-2px);
-        }
-
         /* 主内容区 */
         .container {
             max-width: 1200px;
@@ -80,9 +20,9 @@
             width: 100%;
             border-collapse: collapse;
             background: var(--primary-bg);
-            border-radius: var(--radius);
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .question-table th {
@@ -124,42 +64,17 @@
             color: #C62828;
         }
 
-        /* 主题切换按钮 */
-        .theme-toggle {
-            background: var(--primary-accent);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: center;
-                padding: 1rem;
-            }
-
-            .nav-link {
-                margin: 0.3rem 0;
-            }
-        }
-
         .question-link {
             color: var(--link-normal);
             text-decoration: none;
             position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
 
         .question-link:hover {
             color: var(--link-hover);
-            text-decoration: none;
         }
 
-        /* 下划线动画效果 */
         .question-link::after {
             content: '';
             position: absolute;
@@ -175,32 +90,26 @@
             width: 100%;
         }
 
-        /* 已访问链接处理 */
         .question-link:visited {
             color: var(--link-visited);
         }
 
         [data-theme="dark"] .question-table tr:hover {
-            background: var(--dark-row-hover);
-        }
-
-        /* 暗夜模式下的焦点轮廓优化 */
-        [data-theme="dark"] .question-link:focus {
-            outline: 2px solid rgba(165, 180, 252, 0.5);
-            outline-offset: 2px;
+            background: rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 
 <body>
     <nav class="navbar">
-        <div class="nav-group">
+        <div class="nav-links">
             <a href="/" class="nav-link">首页</a>
-            <a href="/questions" class="nav-link">题库</a>
+            <a href="/all_questions" class="nav-link">题库</a>
         </div>
-        <div class="nav-group">
-            <button class="theme-toggle" onclick="toggleTheme()">切换主题</button>
-            <a href="/login" class="nav-link">登录</a>
+        <div class="nav-right">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+            </button>
         </div>
     </nav>
 
@@ -226,20 +135,7 @@
         </table>
     </main>
 
-    <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-
-            // 同步保存用户偏好
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-        }
-
-        // 初始化主题
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    </script>
+    <script src="/js/app.js"></script>
 </body>
 
 </html>
