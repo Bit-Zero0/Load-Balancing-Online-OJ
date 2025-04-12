@@ -10,7 +10,7 @@
 
 #include "../comm/log.hpp"
 #include "../comm/util.hpp"
-#include "oj_model.hpp"
+#include "oj_model2.hpp"
 #include "oj_view.hpp"
 #include "../comm/httplib.h"
 

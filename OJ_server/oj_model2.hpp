@@ -1,9 +1,17 @@
 #pragma once
 
+// #include <iostream>
+// #include <vector>
+// #include <string>
+// #include <cstdlib>
+
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
+#include <unordered_map>
+#include <fstream>
 #include <cstdlib>
+#include <cassert>
 
 #include "include/mysql.h"
 #include "../comm/log.hpp"
@@ -25,11 +33,11 @@ namespace ns_model
         int mem_limit;      // 题目的空间要去(KB)
     };
 
-    const string questions = "data";
+    const string questions = "questions";
     const string host = "127.0.0.1";
     const string user = "oj_client";
     const string passwd = "123456";
-    const string db = "oj";
+    const string db = "OJ";
     const int port = 3306;
 
     class Model
@@ -47,22 +55,19 @@ namespace ns_model
             // 连接数据库
             if (nullptr == mysql_real_connect(my, host.c_str(), user.c_str(), passwd.c_str(), db.c_str(), port, nullptr, 0))
             {
-                LOG(FATAL) << "连接数据库失败!"
-                           << "\n";
+                LOG(FATAL) << "连接数据库失败!" << "\n";
                 return false;
             }
 
             // 一定要设置该链接的编码格式, 要不然会出现乱码问题
             mysql_set_character_set(my, "utf8");
 
-            LOG(INFO) << "连接数据库成功!"
-                      << "\n";
+            LOG(INFO) << "连接数据库成功!" << "\n";
 
             // 执行sql语句
             if (0 != mysql_query(my, sql.c_str()))
             {
-                LOG(WARNNING) << sql << " execute error!"
-                              << "\n";
+                LOG(WARNNING) << sql << " execute error!" << "\n";
                 return false;
             }
 
@@ -89,8 +94,10 @@ namespace ns_model
 
                 out->push_back(q);
             }
+
+
             // 释放结果空间
-            free(res);
+            mysql_free_result(res);
             // 关闭mysql连接
             mysql_close(my);
 
